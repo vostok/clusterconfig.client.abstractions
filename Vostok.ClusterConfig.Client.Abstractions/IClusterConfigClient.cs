@@ -7,9 +7,9 @@ namespace Vostok.ClusterConfig.Client.Abstractions
 {
     /// <summary>
     /// <para>Represents a client for ClusterConfig service used to obtain application settings.</para>
-    /// <para>Settings in ClusterConfig comprise a tree, and the main operation this client presents is obtaining settings by a prefix.</para>
+    /// <para>Settings in ClusterConfig comprise a tree, and the main operation this client presents is obtaining settings by prefix.</para>
     /// <para>Prefixes are tree paths: they consist of node names separated by forward slashes (e.g. <c>foo/bar/baz</c>).</para>
-    /// <para> This client's methods come in three flavors:</para>
+    /// <para>This client's methods come in three flavors:</para>
     /// <list type="bullet">
     ///     <item><description>Synchronous (<see cref="Get"/>, <see cref="GetWithVersion"/>)</description></item>
     ///     <item><description>Asynchronous (<see cref="GetAsync"/>, <see cref="GetWithVersionAsync"/>)</description></item>
@@ -20,9 +20,9 @@ namespace Vostok.ClusterConfig.Client.Abstractions
     public interface IClusterConfigClient
     {
         /// <summary>
-        /// <para>Obtains and returns the subtree settings located under given <paramref name="prefix"/>.</para>
+        /// <para>Obtains and returns the subtree of settings located under given <paramref name="prefix"/>.</para>
         /// <para>If given <paramref name="prefix"/> is empty, returns all settings from current zone (whole tree).</para>
-        /// <para>If settings tree has not yet been obtained for the first time, this method will block until that happens.</para>
+        /// <para>If settings tree has not yet been obtained for the first time, this method blocks until that happens.</para>
         /// <para>If settings tree has already been obtained at least once, this method immediately returns data from cache.</para>
         /// <para>If initial settings load attempt fails, this method is expected to throw an exception instead of blocking indefinitely.</para>
         /// </summary>
@@ -33,7 +33,7 @@ namespace Vostok.ClusterConfig.Client.Abstractions
         /// <summary>
         /// <inheritdoc cref="Get"/>
         /// <para>
-        /// This overload also returns a version to facilitate application-level caching.
+        /// This method also returns a version to facilitate application-level caching.
         /// This version grows monotonically: it is guaranteed to increase on every observed change in settings.
         /// </para>
         /// </summary>
@@ -50,7 +50,7 @@ namespace Vostok.ClusterConfig.Client.Abstractions
         Task<(ISettingsNode settings, long version)> GetWithVersionAsync(ClusterConfigPath prefix);
 
         /// <summary>
-        /// <para>Returns an observable sequence of the settings belonging to the subtree located under given <paramref name="prefix"/>.</para>
+        /// <para>Returns an observable sequence of settings belonging to the subtree located under given <paramref name="prefix"/>.</para>
         /// <para>If given <paramref name="prefix"/> is <c>null</c>, returns all settings from current zone (whole tree).</para>
         /// <para>If settings tree has not yet been obtained for the first time, returned sequence does not immediately produce any values.</para>
         /// <para>If settings tree has already been obtained at least once, returned sequence immediately produces a value taken from cache.</para>
@@ -63,7 +63,7 @@ namespace Vostok.ClusterConfig.Client.Abstractions
         /// <summary>
         /// <inheritdoc cref="Observe"/>
         /// <para>
-        /// This overload also provides a version alongside with settings to facilitate application-level caching.
+        /// This method also provides a version alongside with settings to facilitate application-level caching.
         /// This version grows monotonically in scope of returned observable sequence: it is guaranteed to increase on every observed change in settings.
         /// </para>
         /// </summary>
