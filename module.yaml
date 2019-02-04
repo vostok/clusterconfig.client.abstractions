@@ -1,0 +1,19 @@
+notests *default:
+  build:
+    target: Vostok.ClusterConfig.Client.Abstractions.sln
+    configuration: NoTests
+    tool:
+      name: dotnet
+
+  install:
+    - Vostok.ClusterConfig.Client.Abstractions/bin/Release/netstandard2.0/Vostok.ClusterConfig.Client.Abstractions.dll
+    - module vostok.configuration.abstractions
+
+  deps:
+    - vostok.devtools
+    - vostok.configuration.abstractions
+
+full-build > notests:
+  build:
+    target: Vostok.ClusterConfig.Client.Abstractions.sln
+    configuration: Release
