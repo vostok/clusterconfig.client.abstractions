@@ -81,5 +81,31 @@ namespace Vostok.ClusterConfig.Client.Abstractions.Tests
             path1.GetHashCode().Should().Be(path2.GetHashCode());
             path1.GetHashCode().Should().NotBe(path3.GetHashCode());
         }
+
+        [TestCase(null, null, true)]
+        [TestCase(null, "", true)]
+        [TestCase(null, "foo", true)]
+        [TestCase(null, "foo/bar", true)]
+        [TestCase("", "foo/bar", true)]
+        [TestCase("///", "foo/bar", true)]
+
+        [TestCase("foo", null, false)]
+        [TestCase("foo", "foo", true)]
+        [TestCase("foo", "foofoo", false)]
+        [TestCase("foo", "foo/bar", true)]
+        [TestCase("foo", "foo/bar/baz/", true)]
+
+        [TestCase("foo/bar", "", false)]
+        [TestCase("foo/bar", "foo", false)]
+        [TestCase("foo/bar", "Foo/BAR", true)]
+        [TestCase("foo/bar", "Foo/BAR/baz/", true)]
+
+        [TestCase("foo/bar/baz", "foo/baz", false)]
+        [TestCase("foo/bar/baz", "foo/baz/bar", false)]
+        [TestCase("foo/bar/baz", "foo/bar/whatever", false)]
+        public void IsPrefix_should_return_correct_result_based_on_given_input(string path1, string path2, bool expectedResult)
+        {
+            new ClusterConfigPath(path1).IsPrefixOf(new ClusterConfigPath(path2)).Should().Be(expectedResult);
+        }
     }
 }

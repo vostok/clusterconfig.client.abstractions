@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 
 namespace Vostok.ClusterConfig.Client.Abstractions
@@ -50,6 +51,28 @@ namespace Vostok.ClusterConfig.Client.Abstractions
 
                 if (segmentBeginning < path.Length)
                     yield return path.Substring(segmentBeginning, path.Length - segmentBeginning);
+            }
+        }
+
+        /// <summary>
+        /// Returns <c>true</c> if <see cref="Segments"/> sequence of current path is a prefix of <paramref name="otherPath"/> <see cref="Segments"/>, or <c>false</c> otherwise.
+        /// </summary>
+        public bool IsPrefixOf(ClusterConfigPath otherPath)
+        {
+            using (var segments = Segments.GetEnumerator())
+            using (var otherSegments = otherPath.Segments.GetEnumerator())
+            {
+                while (true)
+                {
+                    if (!segments.MoveNext())
+                        return true;
+
+                    if (!otherSegments.MoveNext())
+                        return false;
+
+                    if (!StringComparer.OrdinalIgnoreCase.Equals(segments.Current, otherSegments.Current))
+                        return false;
+                }
             }
         }
 
