@@ -15,6 +15,15 @@ namespace Vostok.ClusterConfig.Client.Abstractions
     ///     <item><description>Asynchronous (<see cref="GetAsync"/>, <see cref="GetWithVersionAsync"/>)</description></item>
     ///     <item><description>Reactive (<see cref="Observe"/>, <see cref="ObserveWithVersions"/>)</description></item>
     /// </list>
+    /// <para>Returned <see cref="ISettingsNode"/>s' structure obeys following rules:</para>
+    /// <list type="bullet">
+    ///     <item><description>Zone root is always an <see cref="ObjectNode"/> with <c>null</c> name. It gets returned for queries with empty prefix.</description></item>
+    ///     <item><description>Every subdirectory on the way to some file is always an <see cref="ObjectNode"/> with corresponding name.</description></item>
+    ///     <item><description>Every file is always an <see cref="ObjectNode"/> with corresponding name.</description></item>
+    ///     <item><description>Every keyed setting in the file is either a <see cref="ValueNode"/> (if it's a single value) or <see cref="ArrayNode"/> (if there are multiple values with same key).</description></item>
+    ///     <item><description>All unkeyed settings in the file are implicitly keyed with an <see cref="string.Empty"/> string, but otherwise are treated same as above.</description></item>
+    ///     <item><description>An empty file's node contains a single <see cref="ValueNode"/> with empty name and value.</description></item>
+    /// </list>
     /// </summary>
     [PublicAPI]
     public interface IClusterConfigClient
