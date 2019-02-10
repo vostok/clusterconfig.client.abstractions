@@ -14,6 +14,8 @@ namespace Vostok.ClusterConfig.Client.Abstractions
     {
         public const char Separator = '/';
 
+        public const string SeparatorString = "/";
+
         public static readonly ClusterConfigPath Empty;
 
         [CanBeNull]
