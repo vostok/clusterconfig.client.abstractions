@@ -13,13 +13,14 @@ namespace Vostok.ClusterConfig.Client.Abstractions
         /// <para>Value list for a <see cref="ValueNode"/> consists just of its single <see cref="ISettingsNode.Value"/>.</para>
         /// <para>Value list for an <see cref="ArrayNode"/> consists of <see cref="ISettingsNode.Value"/>s of its child nodes.</para>
         /// <para>Every key is assembled from leaf node name and names of all intermediate <see cref="ObjectNode"/>s by joining them with <see cref="ClusterConfigPath.Separator"/>.</para>
+        /// <para>The only exception is the name of given <paramref name="node"/> itself: it's not included in keys.</para>
         /// </summary>
         [NotNull]
         public static Dictionary<ClusterConfigPath, List<string>> Flatten([CanBeNull] this ISettingsNode node)
         {
             var result = new Dictionary<ClusterConfigPath, List<string>>();
 
-            VisitNode(node, new List<string>(), result);
+            VisitNodeInternal(node, new List<string>(), result);
 
             return result;
         }
@@ -31,6 +32,13 @@ namespace Vostok.ClusterConfig.Client.Abstractions
 
             path.Add(node.Name);
 
+            VisitNodeInternal(node, path, result);
+
+            path.RemoveAt(path.Count - 1);
+        }
+
+        private static void VisitNodeInternal(ISettingsNode node, List<string> path, Dictionary<ClusterConfigPath, List<string>> result)
+        {
             switch (node)
             {
                 case ObjectNode objectNode:
@@ -48,8 +56,6 @@ namespace Vostok.ClusterConfig.Client.Abstractions
                     result[AssemblePath(path)] = new List<string>(arrayNode.Children.Select(child => child.Value));
                     break;
             }
-            
-            path.RemoveAt(path.Count - 1);
         }
 
         private static ClusterConfigPath AssemblePath(List<string> segments)

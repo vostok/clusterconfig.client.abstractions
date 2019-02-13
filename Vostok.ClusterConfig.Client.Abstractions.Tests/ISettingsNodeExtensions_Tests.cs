@@ -19,7 +19,7 @@ namespace Vostok.ClusterConfig.Client.Abstractions.Tests
             var node = new ValueNode("key", "value");
 
             node.Flatten().Should().HaveCount(1);
-            node.Flatten()["key"].Should().ContainSingle().Which.Should().Be("value");
+            node.Flatten()[""].Should().ContainSingle().Which.Should().Be("value");
         }
 
         [Test]
@@ -32,7 +32,7 @@ namespace Vostok.ClusterConfig.Client.Abstractions.Tests
             });
 
             node.Flatten().Should().HaveCount(1);
-            node.Flatten()["key"].Should().Equal("value1", "value2");
+            node.Flatten()[""].Should().Equal("value1", "value2");
         }
 
         [Test]
