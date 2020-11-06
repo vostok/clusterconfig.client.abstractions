@@ -29,6 +29,11 @@ namespace Vostok.ClusterConfig.Client.Abstractions
     public interface IClusterConfigClient
     {
         /// <summary>
+        /// Returns <c>true</c> if initial settings update has already been completed, or <c>false</c> otherwise.
+        /// </summary>
+        bool HasInitialized { get; }
+        
+        /// <summary>
         /// <para>Obtains and returns the subtree of settings located under given <paramref name="prefix"/>.</para>
         /// <para>If given <paramref name="prefix"/> is empty, returns all settings from current zone (whole tree).</para>
         /// <para>If settings tree has not yet been obtained for the first time, this method blocks until that happens.</para>
