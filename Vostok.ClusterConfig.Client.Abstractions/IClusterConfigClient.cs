@@ -78,5 +78,8 @@ namespace Vostok.ClusterConfig.Client.Abstractions
         /// </summary>
         [NotNull]
         IObservable<(ISettingsNode settings, long version)> ObserveWithVersions(ClusterConfigPath prefix);
+        
+        [CanBeNull]
+        ProtocolVersion? ForcedProtocolVersion { get; set; }
     }
 }
