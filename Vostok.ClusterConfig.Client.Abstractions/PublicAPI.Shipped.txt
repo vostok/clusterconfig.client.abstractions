@@ -1,0 +1,25 @@
+const Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.Separator = '/' -> char
+const Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.SeparatorString = "/" -> string
+override Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.Equals(object obj) -> bool
+override Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.GetHashCode() -> int
+override Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.ToString() -> string
+static readonly Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.Empty -> Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath
+static Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.implicit operator Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath(string value) -> Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath
+static Vostok.ClusterConfig.Client.Abstractions.ISettingsNodeExtensions.Flatten(this Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode node) -> System.Collections.Generic.Dictionary<Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath, System.Collections.Generic.List<string>>
+Vostok.ClusterConfig.Client.Abstractions.ClusterConfigClientException
+Vostok.ClusterConfig.Client.Abstractions.ClusterConfigClientException.ClusterConfigClientException(string message) -> void
+Vostok.ClusterConfig.Client.Abstractions.ClusterConfigClientException.ClusterConfigClientException(string message, System.Exception innerException) -> void
+Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath
+Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.ClusterConfigPath() -> void
+Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.ClusterConfigPath(string path) -> void
+Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.Equals(Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath other) -> bool
+Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.IsPrefixOf(Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath otherPath) -> bool
+Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.Segments.get -> System.Collections.Generic.IEnumerable<string>
+Vostok.ClusterConfig.Client.Abstractions.IClusterConfigClient
+Vostok.ClusterConfig.Client.Abstractions.IClusterConfigClient.Get(Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath prefix) -> Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode
+Vostok.ClusterConfig.Client.Abstractions.IClusterConfigClient.GetAsync(Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath prefix) -> System.Threading.Tasks.Task<Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode>
+Vostok.ClusterConfig.Client.Abstractions.IClusterConfigClient.GetWithVersion(Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath prefix) -> (Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode settings, long version)
+Vostok.ClusterConfig.Client.Abstractions.IClusterConfigClient.GetWithVersionAsync(Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath prefix) -> System.Threading.Tasks.Task<(Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode settings, long version)>
+Vostok.ClusterConfig.Client.Abstractions.IClusterConfigClient.Observe(Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath prefix) -> System.IObservable<Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode>
+Vostok.ClusterConfig.Client.Abstractions.IClusterConfigClient.ObserveWithVersions(Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath prefix) -> System.IObservable<(Vostok.Configuration.Abstractions.SettingsTree.ISettingsNode settings, long version)>
+Vostok.ClusterConfig.Client.Abstractions.ISettingsNodeExtensions
