@@ -56,11 +56,60 @@ namespace Vostok.ClusterConfig.Client.Abstractions
             }
         }
 
+#if NET6_0_OR_GREATER
+        /// <summary>
+        /// Represents this path as a sequence of segments separated by <see cref="Separator"/>. May return an empty sequence.
+        /// </summary>
+        [NotNull]
+        public IEnumerable<ReadOnlyMemory<char>> SegmentsAsMemory
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(path))
+                    yield break;
+
+                var pathAsMemory = path.AsMemory();
+                var segmentBeginning = 0;
+
+                for (var i = 0; i < path.Length; i++)
+                {
+                    var current = path[i];
+                    if (current == Separator)
+                    {
+                        if (i > segmentBeginning)
+                            yield return pathAsMemory.Slice(segmentBeginning, i - segmentBeginning);
+
+                        segmentBeginning = i + 1;
+                    }
+                }
+
+                if (segmentBeginning < path.Length)
+                    yield return pathAsMemory.Slice(segmentBeginning, path.Length - segmentBeginning);
+            }
+        }
+#endif
+
         /// <summary>
         /// Returns <c>true</c> if <see cref="Segments"/> sequence of current path is a prefix of <paramref name="otherPath"/> <see cref="Segments"/>, or <c>false</c> otherwise.
         /// </summary>
         public bool IsPrefixOf(ClusterConfigPath otherPath)
         {
+#if NET6_0_OR_GREATER
+            using var segments = SegmentsAsMemory.GetEnumerator();
+            using var otherSegments = otherPath.SegmentsAsMemory.GetEnumerator();
+            
+            while (true)
+            {
+                if (!segments.MoveNext())
+                    return true;
+
+                if (!otherSegments.MoveNext())
+                    return false;
+
+                if (!segments.Current.Span.Equals(otherSegments.Current.Span, StringComparison.OrdinalIgnoreCase))
+                    return false;
+            }
+#else
             using (var segments = Segments.GetEnumerator())
             using (var otherSegments = otherPath.Segments.GetEnumerator())
             {
@@ -76,6 +125,7 @@ namespace Vostok.ClusterConfig.Client.Abstractions
                         return false;
                 }
             }
+#endif
         }
 
         public override string ToString() 

@@ -1,0 +1,1 @@
+Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.SegmentsAsMemory.get -> System.Collections.Generic.IEnumerable<System.ReadOnlyMemory<char>>

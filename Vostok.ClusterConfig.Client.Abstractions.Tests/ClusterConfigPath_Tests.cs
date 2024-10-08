@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using NUnit.Framework;
 
 // ReSharper disable ObjectCreationAsStatement
@@ -42,12 +43,18 @@ namespace Vostok.ClusterConfig.Client.Abstractions.Tests
         public void Segments_property_should_correctly_split_path_into_segments()
         {
             new ClusterConfigPath("foo/bar/baz").Segments.Should().Equal("foo", "bar", "baz");
+#if NET6_0_OR_GREATER
+            new ClusterConfigPath("foo/bar/baz").SegmentsAsMemory.Select(x => x.ToString()).Should().Equal("foo", "bar", "baz");
+#endif
         }
 
         [Test]
         public void Segments_property_should_omit_empty_segments()
         {
             new ClusterConfigPath("/foo//bar//baz/").Segments.Should().Equal("foo", "bar", "baz");
+#if NET6_0_OR_GREATER
+            new ClusterConfigPath("/foo//bar//baz/").SegmentsAsMemory.Select(x => x.ToString()).Should().Equal("foo", "bar", "baz");
+#endif
         }
 
         [Test]
@@ -58,6 +65,13 @@ namespace Vostok.ClusterConfig.Client.Abstractions.Tests
             new ClusterConfigPath("/").Segments.Should().BeEmpty();
 
             new ClusterConfigPath("///").Segments.Should().BeEmpty();
+#if NET6_0_OR_GREATER
+            default(ClusterConfigPath).SegmentsAsMemory.Should().BeEmpty();
+
+            new ClusterConfigPath("/").SegmentsAsMemory.Should().BeEmpty();
+
+            new ClusterConfigPath("///").SegmentsAsMemory.Should().BeEmpty();
+#endif
         }
 
         [Test]
