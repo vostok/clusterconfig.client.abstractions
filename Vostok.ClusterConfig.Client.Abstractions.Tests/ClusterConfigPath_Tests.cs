@@ -121,5 +121,56 @@ namespace Vostok.ClusterConfig.Client.Abstractions.Tests
         {
             new ClusterConfigPath(path1).IsPrefixOf(new ClusterConfigPath(path2)).Should().Be(expectedResult);
         }
+
+        [TestCase(null, null, true, "")]
+        [TestCase(null, "", true, "")]
+        [TestCase(null, "foo", false, null)]
+        [TestCase("", "foo/bar", false, null)]
+        [TestCase("///", "foo/bar", false, null)]
+
+        [TestCase("foo", null, true, "foo")]
+        [TestCase("foo", "foo", true, "")]
+        [TestCase("foo", "foofoo", false, null)]
+        [TestCase("foo", "foo/bar", false, null)]
+        [TestCase("foo", "foo/bar/baz/", false, null)]
+
+        [TestCase("foo/bar", null, true, "foo/bar")]
+        [TestCase("foo/bar", "", true, "foo/bar")]
+        [TestCase("foo/bar", "/", true, "foo/bar")]
+        [TestCase("foo/bar", "foo", true, "bar")]
+        [TestCase("foo/bar", "Foo/BAR", true, "")]
+        [TestCase("foo/bar", "Foo/BAR/baz/", false, null)]
+
+        [TestCase("foo/bar/baz", "foo/baz", false, null)]
+        [TestCase("foo/bar/baz", "foo/baz/bar", false, null)]
+        [TestCase("foo/bar/baz", "foo/bar/whatever", false, null)]
+        public void TryScopeTo_Test(string path, string prefix, bool expectedResult, string expectedScopedPath)
+        {
+            new ClusterConfigPath(path).TryScopeTo(new ClusterConfigPath(prefix), out var scopedPath).Should().Be(expectedResult);
+            if (expectedResult)
+                scopedPath.ToString().Should().Be(expectedScopedPath);
+        }
+
+        [TestCase(null, null, true)]
+        [TestCase(null, "", true)]
+        [TestCase(null, "foo", false)]
+        [TestCase(null, "foo/bar", false)]
+        [TestCase("", "foo/bar", false)]
+        [TestCase("///", "foo/bar", false)]
+        [TestCase("///", "", true)]
+        [TestCase("///", null, true)]
+        [TestCase("///", "/", true)]
+        
+        [TestCase("foo", "foo", true)]
+        [TestCase("foo", "foofoo", false)]
+        [TestCase("foo/bar", "/foo/bar", true)]
+        [TestCase("foo", "foo/bar/baz/", false)]
+        [TestCase("foo/bar", "Foo/BAR", true)]
+        [TestCase("foo/bar/baz", "foo/bar/whatever", false)]
+        public void Equivalent_Test(string path1, string path2, bool expectedResult)
+        {
+            new ClusterConfigPath(path1).Equivalent(new ClusterConfigPath(path2)).Should().Be(expectedResult);
+            new ClusterConfigPath(path2).Equivalent(new ClusterConfigPath(path1)).Should().Be(expectedResult);
+        }
     }
 }
