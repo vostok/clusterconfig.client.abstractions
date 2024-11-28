@@ -172,5 +172,17 @@ namespace Vostok.ClusterConfig.Client.Abstractions.Tests
             new ClusterConfigPath(path1).Equivalent(new ClusterConfigPath(path2)).Should().Be(expectedResult);
             new ClusterConfigPath(path2).Equivalent(new ClusterConfigPath(path1)).Should().Be(expectedResult);
         }
+
+        [TestCase("///", "")]
+        [TestCase("", "")]
+        [TestCase("/", "")]
+        [TestCase(null, "")]
+        [TestCase("foo", "foo")]
+        [TestCase("foo/bar", "foo/bar")]
+        [TestCase("/foo//bar//baz/", "foo/bar/baz")]
+        public void GetNormalizedPath_Tests(string path, string expected)
+        {
+            new ClusterConfigPath(path).GetNormalizedPath().Should().Be(expected);
+        }
     }
 }
