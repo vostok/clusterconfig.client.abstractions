@@ -1,0 +1,4 @@
+Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.Equivalent(Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath other) -> bool
+Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.GetNormalizedPath() -> string
+Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.SegmentsAsMemory.get -> System.Collections.Generic.IEnumerable<System.ReadOnlyMemory<char>>
+Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath.TryScopeTo(Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath prefix, out Vostok.ClusterConfig.Client.Abstractions.ClusterConfigPath newPath) -> bool

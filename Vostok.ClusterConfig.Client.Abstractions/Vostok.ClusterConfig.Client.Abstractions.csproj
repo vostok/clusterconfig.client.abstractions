@@ -31,5 +31,10 @@
       <HintPath>..\..\vostok.configuration.abstractions\Vostok.Configuration.Abstractions\bin\Release\$(ReferencesFramework)\Vostok.Configuration.Abstractions.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="PublicAPI/$(TargetFramework)/PublicAPI.Shipped.txt" />
+    <AdditionalFiles Include="PublicAPI/$(TargetFramework)/PublicAPI.Unshipped.txt" />
+  </ItemGroup>
   
 </Project>
