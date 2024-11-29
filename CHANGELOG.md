@@ -1,3 +1,8 @@
+## 0.1.3 (28-11-2024):
+
+* IsPrefixOf now does not allocate strings.
+* Added several new methods for internal ClusterClient purposes.
+
 ## 0.1.2 (06-12-2021):
 
 Added `net6.0` target.
