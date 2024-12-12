@@ -1,3 +1,7 @@
+## 0.1.4 (12-12-2024): 
+
+Bump NuGet deps versions
+
 ## 0.1.3 (28-11-2024):
 
 * IsPrefixOf now does not allocate strings.
