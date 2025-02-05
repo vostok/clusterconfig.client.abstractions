@@ -14,10 +14,6 @@ notests *default:
     - vostok.configuration.abstractions
 
 full-build > notests:
-  deps:
-    - -vostok.devtools
-    - vostok.devtools@with-net6.0
-
   build:
     target: Vostok.ClusterConfig.Client.Abstractions.sln
     configuration: Release
