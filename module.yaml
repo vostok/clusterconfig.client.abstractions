@@ -8,12 +8,48 @@ notests *default:
   install:
     - Vostok.ClusterConfig.Client.Abstractions/bin/Release/netstandard2.0/Vostok.ClusterConfig.Client.Abstractions.dll
     - module vostok.configuration.abstractions
+    - groups:
+      - target-framework: "netstandard2.0"
+        libraries:
+          - Vostok.ClusterConfig.Client.Abstractions/bin/Release/netstandard2.0/Vostok.ClusterConfig.Client.Abstractions.dll
+        modules:
+          - name: vostok.configuration.abstractions
+      - target-framework: "net6.0"
+        libraries:
+          - Vostok.ClusterConfig.Client.Abstractions/bin/Release/net6.0/Vostok.ClusterConfig.Client.Abstractions.dll
+        modules:
+          - name: vostok.configuration.abstractions
+      - target-framework: "net8.0"
+        libraries:
+          - Vostok.ClusterConfig.Client.Abstractions/bin/Release/net8.0/Vostok.ClusterConfig.Client.Abstractions.dll
+        modules:
+          - name: vostok.configuration.abstractions
 
   deps:
     - vostok.devtools
     - vostok.configuration.abstractions
 
 full-build > notests:
+  install:
+    - Vostok.ClusterConfig.Client.Abstractions/bin/Release/netstandard2.0/Vostok.ClusterConfig.Client.Abstractions.dll
+    - module vostok.configuration.abstractions
+    - groups:
+        - target-framework: "netstandard2.0"
+          libraries:
+            - Vostok.ClusterConfig.Client.Abstractions/bin/Release/netstandard2.0/Vostok.ClusterConfig.Client.Abstractions.dll
+          modules:
+            - name: vostok.configuration.abstractions
+        - target-framework: "net6.0"
+          libraries:
+            - Vostok.ClusterConfig.Client.Abstractions/bin/Release/net6.0/Vostok.ClusterConfig.Client.Abstractions.dll
+          modules:
+            - name: vostok.configuration.abstractions
+        - target-framework: "net8.0"
+          libraries:
+            - Vostok.ClusterConfig.Client.Abstractions/bin/Release/net8.0/Vostok.ClusterConfig.Client.Abstractions.dll
+          modules:
+            - name: vostok.configuration.abstractions
+
   build:
     target: Vostok.ClusterConfig.Client.Abstractions.sln
     configuration: Release
