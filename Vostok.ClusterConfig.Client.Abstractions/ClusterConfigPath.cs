@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using JetBrains.Annotations;
@@ -65,26 +66,85 @@ namespace Vostok.ClusterConfig.Client.Abstractions
         {
             get
             {
-                if (string.IsNullOrEmpty(path))
-                    yield break;
+                return new SegmentEnumerable(path);
+            }
+        }
+        
+        private class SegmentEnumerable : IEnumerable<ReadOnlyMemory<char>>
+        {
+            private readonly string path;
 
-                var pathAsMemory = path.AsMemory();
-                var segmentBeginning = 0;
+            public SegmentEnumerable(string path)
+            {
+                this.path = path;
+            }
 
-                for (var i = 0; i < path.Length; i++)
+            public IEnumerator<ReadOnlyMemory<char>> GetEnumerator()
+            {
+                return new SegmentEnumerator(path);
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+        }
+
+        private struct SegmentEnumerator : IEnumerator<ReadOnlyMemory<char>>
+        {
+            private readonly string path;
+            private int index = 0;
+            private int segmentBeginning = 0;
+            private int from = 0;
+
+            public SegmentEnumerator(string path)
+            {
+                this.path = path;
+            }
+
+            public bool MoveNext()
+            { 
+                if (string.IsNullOrEmpty(path) || index == path.Length)
+                    return false;
+                
+                for (; index < path.Length; index++)
                 {
-                    var current = path[i];
+                    var current = path[index];
                     if (current == Separator)
                     {
-                        if (i > segmentBeginning)
-                            yield return pathAsMemory.Slice(segmentBeginning, i - segmentBeginning);
+                        if (index > segmentBeginning)
+                        {
+                            from = segmentBeginning;
+                            segmentBeginning = index + 1;
 
-                        segmentBeginning = i + 1;
+                            return true;
+                        }
+
+                        segmentBeginning = index + 1;
                     }
                 }
 
                 if (segmentBeginning < path.Length)
-                    yield return pathAsMemory.Slice(segmentBeginning, path.Length - segmentBeginning);
+                {
+                    from = segmentBeginning;
+                    return true;
+                }
+
+                return false;
+            }
+
+            public void Reset()
+            {
+                index = 0;
+                segmentBeginning = 0;
+            }
+
+            public ReadOnlyMemory<char> Current { get => path.AsMemory().Slice(from, index - from); } 
+            object IEnumerator.Current =>
+                Current;
+
+            public void Dispose()
+            {
             }
         }
 #endif
@@ -95,8 +155,8 @@ namespace Vostok.ClusterConfig.Client.Abstractions
         public bool IsPrefixOf(ClusterConfigPath otherPath)
         {
 #if NET6_0_OR_GREATER
-            using var segments = SegmentsAsMemory.GetEnumerator();
-            using var otherSegments = otherPath.SegmentsAsMemory.GetEnumerator();
+            using var segments = new SegmentEnumerator(path);
+            using var otherSegments = new SegmentEnumerator(otherPath.path);
             
             while (true)
             {
@@ -131,8 +191,8 @@ namespace Vostok.ClusterConfig.Client.Abstractions
         public bool TryScopeTo(ClusterConfigPath prefix, out ClusterConfigPath newPath)
         {
 #if NET6_0_OR_GREATER
-            using var segments = SegmentsAsMemory.GetEnumerator();
-            using var prefixToCutSegments = prefix.SegmentsAsMemory.GetEnumerator();
+            using var segments = new SegmentEnumerator(path);
+            using var prefixToCutSegments = new SegmentEnumerator(prefix.path);
             
             while (true)
             {
@@ -185,8 +245,8 @@ namespace Vostok.ClusterConfig.Client.Abstractions
         public bool Equivalent(ClusterConfigPath other)
         {
 #if NET6_0_OR_GREATER
-            using var segments = SegmentsAsMemory.GetEnumerator();
-            using var otherSegments = other.SegmentsAsMemory.GetEnumerator();
+            using var segments = new SegmentEnumerator(path);
+            using var otherSegments = new SegmentEnumerator(other.path);
             
             while (true)
             {
@@ -227,7 +287,7 @@ namespace Vostok.ClusterConfig.Client.Abstractions
         public string GetNormalizedPath()
         {
 #if NET6_0_OR_GREATER
-            return BuildNormalizedPathFromSegments(SegmentsAsMemory.GetEnumerator()).path;
+            return BuildNormalizedPathFromSegments(new SegmentEnumerator(path)).path;
 #else
             return BuildNormalizedPathFromSegments(Segments.GetEnumerator()).path;
 #endif
