@@ -1,4 +1,4 @@
-## 0.1.5 (02-06-2025):
+## 0.1.6 (02-06-2025):
 
 Minor optimization in `IsPrefixOf`-like methods. Use struct enumerator in a hot path: enumerating the `path` segments.
 
