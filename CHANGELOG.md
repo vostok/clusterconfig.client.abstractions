@@ -1,3 +1,7 @@
+## 0.1.5 (02-06-2025):
+
+Minor optimization in `IsPrefixOf`-like methods. Use struct enumerator in a hot path: enumerating the `path` segments.
+
 ## 0.1.4 (12-12-2024): 
 
 Bump NuGet deps versions
